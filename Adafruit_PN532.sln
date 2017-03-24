@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adafruit_PN532_43", "Adafruit_PN532\Adafruit_PN532_43\Adafruit_PN532_43.csproj", "{783AC279-A936-46A0-A079-F55A2C563567}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adafruit_PN532", "Adafruit_PN532\Adafruit_PN532\Adafruit_PN532.csproj", "{48273C00-52F8-4C7E-8073-678F396EB39A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{783AC279-A936-46A0-A079-F55A2C563567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{783AC279-A936-46A0-A079-F55A2C563567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{783AC279-A936-46A0-A079-F55A2C563567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{783AC279-A936-46A0-A079-F55A2C563567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48273C00-52F8-4C7E-8073-678F396EB39A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48273C00-52F8-4C7E-8073-678F396EB39A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48273C00-52F8-4C7E-8073-678F396EB39A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48273C00-52F8-4C7E-8073-678F396EB39A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

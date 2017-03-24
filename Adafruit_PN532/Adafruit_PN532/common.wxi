@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <!-- Change this whenever building a new installer.  The fourth number is ignored, so change one of the top three.
+  Otherwise, users will not be able to upgrade properly; Windows Installer will exit with an error instead of upgrading. -->
+  <!-- Also change the version numbers in Properties/AssemblyInfo.cs for each NETMF version supported -->
+  <?define ModuleSoftwareVersion = "1.0.0.0" ?>
+
+  <!-- Alternatively, to synchronize this mainboard version to a kit version, uncomment the below lines, edit the pathname
+  to point to your kit, and comment out the line above.  You also need to edit AssemblyInfo.cs.  See the kit readme.txt 
+  for more details of how and why to do this. -->
+  <!--
+  <?include $(var.SourcePath)..\..\..\..\..\Kits\Luca_Sasselli\KitName\Software\KitName\version.wxi ?>
+  <?define ModuleSoftwareVersion = "$(var.KitVersion)" ?>
+  -->
+
+  <!-- FullModuleName can have spaces, e.g. My Module.  This shows up as the product name in add/remove programs. -->
+  <?define FullModuleName = "Adafruit_PN532" ?>
+
+  <!-- SafeModuleName should match the name printed on the module PCB, without any spaces/punctuation. -->
+  <?define SafeModuleName = "Adafruit_PN532" ?>
+
+  <!-- SafeManufacturer should match the manufacturer name printed on the module PCB, without any spaces/punctuation. -->
+  <?define SafeManufacturer = "Luca_Sasselli" ?>
+
+  <!-- FullManufacturer can have spaces, e.g. Microsoft Research.  This shows up as the publisher name in add/remove programs. -->
+  <?define FullManufacturer = "Luca Sasselli" ?>
+
+  <!-- These define which versions of NETMF are supported - comment out or delete any unsupported NETMF versions. -->
+  <!-- <?define NETMF41Supported ?> -->
+  <!-- <?define NETMF42Supported ?> -->
+  <?define NETMF43Supported ?>
+  <!-- <?define NETMF44Supported ?> -->
+
+  <!-- No need to change anything below this line. -->
+  <?define OutputFileName = "GTM.$(var.SafeManufacturer).$(var.SafeModuleName)"?>
+  <?define ProjectPath = "Adafruit_PN532" ?>
+
+  <!-- These two should be copied over if upgrading from an older template -->
+  <?define guid_msi_upgrade_code =  "af262518-81b6-4794-9acd-42c8c1105314" ?>
+  <?define guid_msm_package_id = "f2f68700-2049-461a-b28f-8544c3294ad8" ?>
+
+  <?define guid_msm_comp_resources_id = "7a18bd99-daba-4a27-a3d9-b4f180ddf7ea" ?>
+  <?define guid_msm_comp_registry_id = "6ebcc323-3834-4e39-a485-82e15d958cce" ?>
+  <?define guid_msm_comp_gadgeteerhardware_id = "456b5a19-1650-474c-b410-e0b75dbca0f5"?>
+
+  <?define guid_msm_comp_files_id_41 = "f94d46e7-cf44-4114-97d2-34b8605bbe36" ?>
+  <?define guid_msm_comp_files_be_id_41 = "5f1f6255-267e-478d-bcb5-604d1db1be6b" ?>
+  <?define guid_msm_comp_files_le_id_41 = "0fe0ee71-434c-4ef5-ad01-de3f30a40df1" ?>
+
+  <?define guid_msm_comp_files_id_42 = "2911755e-4a06-4bf4-b6a7-fa7f73301a7e" ?>
+  <?define guid_msm_comp_files_be_id_42 = "7ca8ccfc-332b-4f94-a770-0acfc93bf7f0" ?>
+  <?define guid_msm_comp_files_le_id_42 = "e7676d69-990b-4b5c-a523-a37e0ca17d93" ?>
+
+  <?define guid_msm_comp_files_id_43 = "7427bca6-6bb7-40d8-a62a-b192eb31dacf" ?>
+  <?define guid_msm_comp_files_be_id_43 = "8f78095a-0dd9-4a5c-91de-08341762ae60" ?>
+  <?define guid_msm_comp_files_le_id_43 = "dfa181ea-3e1f-4ec2-bc57-a88637b1a8fb" ?>
+
+  <?define guid_msm_comp_files_id_44 = "98feae00-360b-48c5-8a5d-a113e9212d4e" ?>
+  <?define guid_msm_comp_files_be_id_44 = "2710210c-f3b9-4790-97f8-1d61471b3f79" ?>
+  <?define guid_msm_comp_files_le_id_44 = "ccc57e48-292e-4841-972d-b2679d5616b1" ?>
+</Include>
+
