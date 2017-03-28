@@ -8,6 +8,7 @@ using Microsoft.SPOT.Presentation.Controls;
 using Microsoft.SPOT.Presentation.Media;
 using Microsoft.SPOT.Presentation.Shapes;
 using Microsoft.SPOT.Touch;
+using Microsoft.SPOT.Hardware;
 
 using Gadgeteer.Networking;
 using GT = Gadgeteer;
@@ -25,6 +26,12 @@ namespace NFC_Test
         void ProgramStarted()
         {
             Debug.Print("Program Started");
+
+            Adafruit_PN532 nfc = new Adafruit_PN532(6);
+            nfc.Start();
+            uint version = nfc.GetFirmwareVersion();
+
+            Debug.Print("NFC ver. " + version.ToString());
         }
     }
 }

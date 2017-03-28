@@ -46,10 +46,7 @@
     <None Include="Image.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Adafruit_PN532_41\Adafruit_PN532_41.csproj" />
-    <ProjectReference Include="..\Adafruit_PN532_42\Adafruit_PN532_42.csproj" />
     <ProjectReference Include="..\Adafruit_PN532_43\Adafruit_PN532_43.csproj" />
-    <ProjectReference Include="..\Adafruit_PN532_44\Adafruit_PN532_44.csproj" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
