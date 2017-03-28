@@ -136,6 +136,9 @@ namespace Gadgeteer.Modules.Luca_Sasselli
         const byte PN532_GPIO_P34 = 4;
         const byte PN532_GPIO_P35 = 5;
 
+        const byte[] PN532_ACK = {0x00, 0x00, 0xFF, 0x00, 0xFF, 0x00};
+        const byte[] PN532_FV = {0x00, 0xFF, 0x06, 0xFA, 0xD5, 0x03};
+
         // ######################################
         // SPI CONSTANTS
         // ######################################
@@ -152,7 +155,6 @@ namespace Gadgeteer.Modules.Luca_Sasselli
 
         // Line constants
         const byte SPI_NULL_BYTE = 0xFF;
-
 
         // Main objects
         SPI spi;
@@ -185,6 +187,58 @@ namespace Gadgeteer.Modules.Luca_Sasselli
             byte[] rx_data = new byte[10];
         }
 
+        void start()
+        {
+            Debug.Print("Starting NFC module...");
+
+            // This is needed for synchronization
+            byte[] packet = {PN532_COMMAND_GETFIRMWAREVERSION};
+            sendCommandCheckAck(packet, 1);
+
+        }
+
+        bool sendCommandCheckAck(byte[] cmd, uint cmdlen, uint timeout = 1000)
+        {
+            // Write the command
+            writecommand(cmd, cmdlen);
+
+            // Wait for chip to say its ready!
+            if (!waitready(timeout))
+            {
+                return false;
+            }
+
+            // Read acknowledgement
+            if (!readack()) {
+                Debug.Print("No ACK frame received!");
+                return false;
+            }
+
+            Debug.Print("OK!");
+
+            return true;
+
+        }
+
+        uint getFirmwareVersion() {
+            // Request firmware version
+            byte[] packet = { PN532_COMMAND_GETFIRMWAREVERSION };
+            if (!sendCommandCheckAck(packet, 1))
+            {
+                return 0;
+            }
+
+            // Read response
+            byte[] response = readdata(12);
+
+            if (!response.Equals(PN532_FV))
+            {
+                Debug.Print("Firmware mismatch!");
+            }
+
+            return 0;
+        }
+
         // ######################################
         // LOW LEVEL COMMUNICATION METHODS
         // ######################################
@@ -215,7 +269,7 @@ namespace Gadgeteer.Modules.Luca_Sasselli
             return read;
         }
 
-        private void writecommand(byte[] cmd, byte cmdlen)
+        private void writecommand(byte[] cmd, uint cmdlen)
         {
             cmdlen++;
 
@@ -232,7 +286,7 @@ namespace Gadgeteer.Modules.Luca_Sasselli
                                       PN532_PREAMBLE, 
                                       PN532_PREAMBLE,
                                       PN532_STARTCODE2,
-                                      cmdlen,
+                                      (byte) cmdlen,
                                       (byte) (~cmdlen + 1),
                                       PN532_HOSTTOPN532};
 
@@ -244,30 +298,53 @@ namespace Gadgeteer.Modules.Luca_Sasselli
             byte[] write = Utility.CombineArrays(write_header, cmd);
             write = Utility.CombineArrays(write, write_footer);
 
-            // Create null read array
-            byte[] read = createNullPayload(write.Length);
-
             // Send it
             Debug.Print("\nSending: ");
-            spi.WriteRead(write, read);
+
+            spi.Write(write);
 
         }
 
         private bool isready()
         {
-            return true;
+            // SPI read status and check if ready.
+            byte[] read = new byte[1];
+            byte[] write = {PN532_SPI_STATREAD};
+
+            spi.Write(write);
+            spi.WriteRead(createNullPayload(1), read);
+
+            return read[0] == PN532_SPI_READY;
         }
 
-        private bool waitready(int timeout)
+        private bool waitready(uint timeout)
         {
-            return false;
+            uint timer = 0;
+            while (!isready())
+            {
+                if (timeout != 0)
+                {
+                    timer += 10;
+                    if (timer > timeout)
+                    {
+                        Debug.Print("TIMEOUT!");
+                        return false;
+                    }
+                }
+                // TODO: Does this give access to other threads? Is it bad?
+                System.Threading.Thread.Sleep(10);
+            }
+            return true;
         }
 
         private bool readack()
         {
-            return true;
+            byte[] ackbuff = readdata(6);
+
+            return ackbuff.Equals(PN532_ACK);
         }
 
+        // My methods, they are probably bad.
         private byte[] createNullPayload(int size)
         {
             byte[] output = new byte[size];

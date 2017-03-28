@@ -25,8 +25,6 @@ namespace NFC_Test
         void ProgramStarted()
         {
             Debug.Print("Program Started");
-
-
         }
     }
 }
