@@ -4,7 +4,6 @@ using Microsoft.SPOT.Hardware;
 
 using GT = Gadgeteer;
 using GTM = Gadgeteer.Modules;
-using GTI = Gadgeteer.SocketInterfaces;
 
 namespace Gadgeteer.Modules.Luca_Sasselli
 {
@@ -193,41 +192,64 @@ namespace Gadgeteer.Modules.Luca_Sasselli
         private byte[] readdata(int n)
         {
             byte[] read = new byte[n];
-            byte[] write = new byte[n];
+            byte[] write = createNullPayload(n);
 
-            //Initialize all of the variables to spaces.
-            for (int i = 0; i < n; i++)
-            {
-                write[i] = SPI_NULL_BYTE;
-            }
 
             // SPI write.
             byte[] payload = { PN532_SPI_DATAREAD };
 
             spi.Write(payload);
 
-            if (DEBUG)
-                Debug.Print("Reading: ");
+            Debug.Print("Reading: ");
 
             spi.WriteRead(write, read);
 
-            if (DEBUG)
+            for (int i = 0; i < n; i++)
             {
 
-                for (int i = 0; i < n; i++)
-                {
-
-                    Debug.Print(" 0x");
-                    Debug.Print(read[i].ToString());
-                }
-                Debug.Print("\n");
+                Debug.Print(" 0x");
+                Debug.Print(read[i].ToString());
             }
+            Debug.Print("\n");
 
             return read;
         }
 
-        private void writecommand(byte cmd, byte cmdlen)
+        private void writecommand(byte[] cmd, byte cmdlen)
         {
+            cmdlen++;
+
+            // Compute checksum
+            int checksum = PN532_PREAMBLE + PN532_PREAMBLE + PN532_STARTCODE2 + PN532_HOSTTOPN532;
+
+            for (uint i = 0; i < cmdlen - 1; i++)
+            {
+                checksum += cmd[i];
+            }
+
+            byte[] write_header = {
+                                      PN532_SPI_DATAWRITE,
+                                      PN532_PREAMBLE, 
+                                      PN532_PREAMBLE,
+                                      PN532_STARTCODE2,
+                                      cmdlen,
+                                      (byte) (~cmdlen + 1),
+                                      PN532_HOSTTOPN532};
+
+            byte[] write_footer = {
+                                    (byte) (~checksum), 
+                                    PN532_POSTAMBLE};
+
+            // Create write array
+            byte[] write = Utility.CombineArrays(write_header, cmd);
+            write = Utility.CombineArrays(write, write_footer);
+
+            // Create null read array
+            byte[] read = createNullPayload(write.Length);
+
+            // Send it
+            Debug.Print("\nSending: ");
+            spi.WriteRead(write, read);
 
         }
 
@@ -238,109 +260,25 @@ namespace Gadgeteer.Modules.Luca_Sasselli
 
         private bool waitready(int timeout)
         {
-
+            return false;
         }
 
         private bool readack()
         {
-
+            return true;
         }
 
-        /*private void input_Interrupt(GTI.InterruptInput input, bool value)
+        private byte[] createNullPayload(int size)
         {
-            this.OnButtonEvent(this, value ? ButtonState.Released : ButtonState.Pressed);
+            byte[] output = new byte[size];
+
+            //Initialize all of the variables to spaces.
+            for (int i = 0; i < size; i++)
+            {
+                output[i] = SPI_NULL_BYTE;
+            }
+
+            return output;
         }
-
-        private GTI.InterruptInput input;
-
-        /// <summary>
-        /// Gets a value that indicates whether the button of the Adafruit_PN532 is pressed.
-        /// </summary>
-        public bool IsPressed
-        {
-            get
-            {
-                return this.input.Read();
-            }
-        }
-
-        /// <summary>
-        /// Represents the state of button of the <see cref="Adafruit_PN532"/>.
-        /// </summary>
-        public enum ButtonState
-        {
-            /// <summary>
-            /// The button is released.
-            /// </summary>
-            Released = 0,
-            /// <summary>
-            /// The button is pressed.
-            /// </summary>
-            Pressed = 1
-        }
-
-        /// <summary>
-        /// Represents the delegate that is used to handle the <see cref="ButtonPressed"/>
-        /// and <see cref="ButtonReleased"/> events.
-        /// </summary>
-        /// <param name="sender">The <see cref="Adafruit_PN532"/> object that raised the event.</param>
-        /// <param name="state">The state of the button of the <see cref="Adafruit_PN532"/></param>
-        public delegate void ButtonEventHandler(Adafruit_PN532 sender, ButtonState state);
-
-        /// <summary>
-        /// Raised when the button of the <see cref="Adafruit_PN532"/> is pressed.
-        /// </summary>
-        /// <remarks>
-        /// Implement this event handler and/or the <see cref="ButtonReleased"/> event handler
-        /// when you want to provide an action associated with button events.
-        /// Since the state of the button is passed to the <see cref="ButtonEventHandler"/> delegate,
-        /// so you can use the same event handler for both button states.
-        /// </remarks>
-        public event ButtonEventHandler ButtonPressed;
-
-        /// <summary>
-        /// Raised when the button of the <see cref="Adafruit_PN532"/> is released.
-        /// </summary>
-        /// <remarks>
-        /// Implement this event handler and/or the <see cref="ButtonPressed"/> event handler
-        /// when you want to provide an action associated with button events.
-        /// Since the state of the button is passed to the <see cref="ButtonEventHandler"/> delegate,
-        /// you can use the same event handler for both button states.
-        /// </remarks>
-        public event ButtonEventHandler ButtonReleased;
-
-        private ButtonEventHandler onButton;
-
-        /// <summary>
-        /// Raises the <see cref="ButtonPressed"/> or <see cref="ButtonReleased"/> event.
-        /// </summary>
-        /// <param name="sender">The <see cref="Adafruit_PN532"/> that raised the event.</param>
-        /// <param name="buttonState">The state of the button.</param>
-        protected virtual void OnButtonEvent(Adafruit_PN532 sender, ButtonState buttonState)
-        {
-            if (this.onButton == null)
-            {
-                this.onButton = new ButtonEventHandler(this.OnButtonEvent);
-            }
-
-            if (buttonState == ButtonState.Pressed)
-            {
-                // Program.CheckAndInvoke helps event callers get onto the Dispatcher thread.  
-                // If the event is null then it returns false.
-                // If it is called while not on the Dispatcher thread, it returns false but also re-invokes this method on the Dispatcher.
-                // If on the thread, it returns true so that the caller can execute the event.
-                if (Program.CheckAndInvoke(ButtonPressed, this.onButton, sender, buttonState))
-                {
-                    this.ButtonPressed(sender, buttonState);
-                }
-            }
-            else
-            {
-                if (Program.CheckAndInvoke(ButtonReleased, this.onButton, sender, buttonState))
-                {
-                    this.ButtonReleased(sender, buttonState);
-                }
-            }
-        }*/
     }
 }

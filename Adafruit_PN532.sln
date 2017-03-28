@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adafruit_PN532_43", "Adafru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adafruit_PN532", "Adafruit_PN532\Adafruit_PN532\Adafruit_PN532.csproj", "{48273C00-52F8-4C7E-8073-678F396EB39A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFC_Test", "NFC_Test\NFC_Test.csproj", "{5B8ED8F7-D5AA-4ED6-B8BB-5382435B60BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,12 @@ Global
 		{48273C00-52F8-4C7E-8073-678F396EB39A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48273C00-52F8-4C7E-8073-678F396EB39A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48273C00-52F8-4C7E-8073-678F396EB39A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B8ED8F7-D5AA-4ED6-B8BB-5382435B60BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B8ED8F7-D5AA-4ED6-B8BB-5382435B60BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B8ED8F7-D5AA-4ED6-B8BB-5382435B60BB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5B8ED8F7-D5AA-4ED6-B8BB-5382435B60BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B8ED8F7-D5AA-4ED6-B8BB-5382435B60BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B8ED8F7-D5AA-4ED6-B8BB-5382435B60BB}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
