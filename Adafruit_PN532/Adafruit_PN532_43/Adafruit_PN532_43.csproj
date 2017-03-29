@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Adafruit_PN532_43.cs" />
+    <Compile Include="DebugOnly.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Gadgeteer">

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adafruit_PN532_43", "Adafru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adafruit_PN532", "Adafruit_PN532\Adafruit_PN532\Adafruit_PN532.csproj", "{48273C00-52F8-4C7E-8073-678F396EB39A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFC_Test", "NFC_Test\NFC_Test.csproj", "{5B8ED8F7-D5AA-4ED6-B8BB-5382435B60BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "NFC_Test\Test.csproj", "{5B8ED8F7-D5AA-4ED6-B8BB-5382435B60BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
