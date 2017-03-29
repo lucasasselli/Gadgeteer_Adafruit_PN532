@@ -18,7 +18,7 @@ using GTM = Gadgeteer.Modules;
 // TODO: Check if installer generated works fine.
 using Gadgeteer.Modules.Luca_Sasselli;
 
-namespace NFC_Test
+namespace Test
 {
     public partial class Program
     {
@@ -38,15 +38,25 @@ namespace NFC_Test
 
             nfc.SAMConfig();
 
-            timer = new GT.Timer(300); 
+            timer = new GT.Timer(1000); 
             timer.Tick += NfcScan; 
             timer.Start(); 
         }
 
         void NfcScan(GT.Timer timer)
         {
-            byte[] uid = nfc.ReadPassiveTargetID(Adafruit_PN532.PN532_MIFARE_ISO14443A, 1000);
-            if (uid != null) timer.Stop();
+            byte[] uid = nfc.ReadPassiveTargetID(Adafruit_PN532.PN532_MIFARE_ISO14443A, 200);
+            if (uid != null)
+            {
+                // Card found
+                CardFound();
+            }
+                
+        }
+
+        void CardFound()
+        {
+
         }
     }
 }

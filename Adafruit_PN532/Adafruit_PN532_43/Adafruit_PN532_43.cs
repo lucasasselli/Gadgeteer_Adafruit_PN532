@@ -230,16 +230,16 @@ namespace Gadgeteer.Modules.Luca_Sasselli
         public bool SendCommandCheckAck(byte[] cmd, uint timeout = 1000)
         {
             // Write the command
-            writecommand(cmd);
+            WriteCommand(cmd);
 
             // Wait for chip to say its ready!
-            if (!waitready(timeout))
+            if (!WaitReady(timeout))
             {
                 return false;
             }
 
             // Read acknowledgement
-            if (!readack()) {
+            if (!ReadAck()) {
                 DebugOnly.Print("No ACK frame received!");
                 return false;
             }
@@ -260,7 +260,7 @@ namespace Gadgeteer.Modules.Luca_Sasselli
             }
 
             // Read response
-            byte[] response = readdata(12);
+            byte[] response = ReadData(12);
 
             // Extract firmware version
             byte[] header = Utility.ExtractRangeFromArray(response, 0, 6);
@@ -290,7 +290,7 @@ namespace Gadgeteer.Modules.Luca_Sasselli
                 return false;
             }
 
-            byte[] reponse = readdata(6);
+            byte[] reponse = ReadData(6);
 
             return reponse[5] == 0xFF;
         }
@@ -305,11 +305,12 @@ namespace Gadgeteer.Modules.Luca_Sasselli
                 return 0;
             }
 
-            byte[] reponse = readdata(11);
+            byte[] reponse = ReadData(11);
 
             return reponse[6];
         }
 
+        /// <summary>Configures the Secure Access Module</summary>
         public bool SAMConfig()
         {
             byte[] packet = {
@@ -323,14 +324,16 @@ namespace Gadgeteer.Modules.Luca_Sasselli
                 return false;
             }
 
-            byte[] response = readdata(8);
+            byte[] response = ReadData(8);
 
             return (response[5] == 0x15);
         }
 
+        /// <summary>Sets passive target activation retries</summary>
+        /// <param name="number">Number of retries</param>
         public bool SetPassiveActivationRetries(uint number)
         {
-            // TODO: what???
+
             byte[] packet = {
                                 PN532_COMMAND_RFCONFIGURATION,
                                 5,      // Config item 5 (MaxRetries)
@@ -344,16 +347,19 @@ namespace Gadgeteer.Modules.Luca_Sasselli
                 return false;
             }
 
-            byte[] response = readdata(5);
+            byte[] response = ReadData(5);
 
             return true;
         }
 
+        /// <summary>Reads ID of a passive target</summary>
+        /// <param name="baudrate">Baudrate of the card</param>
+        /// <param name="timeout">Timeout for scan</param>
         public byte[] ReadPassiveTargetID(byte baudrate, uint timeout)
         {
             byte[] packet = {
                                 PN532_COMMAND_INLISTPASSIVETARGET,
-                                1,
+                                1, // Activate only one target (max 2)
                                 baudrate
                             };
 
@@ -362,7 +368,7 @@ namespace Gadgeteer.Modules.Luca_Sasselli
                 return null;
             }
 
-            byte[] response = readdata(20);
+            byte[] response = ReadData(20);
 
             if (response[7] != 1){
                 return null;
@@ -387,7 +393,7 @@ namespace Gadgeteer.Modules.Luca_Sasselli
         // LOW LEVEL COMMUNICATION METHODS
         // ######################################
 
-        private byte[] readdata(int n)
+        private byte[] ReadData(int n)
         {
             byte[] read = new byte[n+1];
 
@@ -408,7 +414,7 @@ namespace Gadgeteer.Modules.Luca_Sasselli
             return read;
         }
 
-        private void writecommand(byte[] cmd)
+        private void WriteCommand(byte[] cmd)
         {
             uint cmdlen = (uint) cmd.Length + 1;
 
@@ -446,14 +452,14 @@ namespace Gadgeteer.Modules.Luca_Sasselli
             DebugOnly.PrintByteArray(write);
         }
 
-        private bool readack()
+        private bool ReadAck()
         {
-            byte[] read = readdata(6);
+            byte[] read = ReadData(6);
 
             return CompareByteArray(read, PN532_ACK);
         }
 
-        private bool isready()
+        private bool IsReady()
         {
             // SPI read status and check if ready.
             byte[] read = new byte[1];
@@ -469,10 +475,10 @@ namespace Gadgeteer.Modules.Luca_Sasselli
             return read[0] == PN532_SPI_READY;
         }
 
-        private bool waitready(uint timeout)
+        private bool WaitReady(uint timeout)
         {
             uint timer = 0;
-            while (!isready())
+            while (!IsReady())
             {
                 if (timeout != 0)
                 {

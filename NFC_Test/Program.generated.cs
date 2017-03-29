@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NFC_Test {
+namespace Test {
     using Gadgeteer;
     using GTM = Gadgeteer.Modules;
     
