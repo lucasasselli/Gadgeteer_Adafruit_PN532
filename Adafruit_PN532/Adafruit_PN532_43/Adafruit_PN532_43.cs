@@ -1,8 +1,7 @@
-﻿using System;
-using Microsoft.SPOT;
+﻿using System.Threading;
+
 using Microsoft.SPOT.Hardware;
 
-using GT = Gadgeteer;
 using GTM = Gadgeteer.Modules;
 
 namespace Gadgeteer.Modules.Luca_Sasselli
@@ -134,10 +133,12 @@ namespace Gadgeteer.Modules.Luca_Sasselli
         // Main objects
         SPI spi;
 
-        // Event handling
+        // Event handling/threading
         /// <summary>Event handler for TAG listener</summary>
         public event NFCEventHandler TagFound;
         public delegate void NFCEventHandler(string uid);
+        private Thread threadScan;
+        private ManualResetEvent threadWaitForStop;
 
         private bool running;
         private int threadPeriod;
@@ -153,6 +154,7 @@ namespace Gadgeteer.Modules.Luca_Sasselli
             SPI.SPI_module spiModule = socket.SPIModule;
             Cpu.Pin chipSelectPort = socket.CpuPins[SPI_CS_PIN];
            
+            // Configure SPI
             SPI.Configuration SpiConfig = new SPI.Configuration(
                 chipSelectPort,
                 SPI_CS_ACTIVE_STATE,
@@ -164,6 +166,9 @@ namespace Gadgeteer.Modules.Luca_Sasselli
                 spiModule);
 
             spi = new SPI(SpiConfig);
+
+            threadScan = new Thread(new ThreadStart(Scan));
+            threadWaitForStop = new ManualResetEvent(false);
         }
 
         /// <summary>Initializes NFC module</summary>
@@ -196,14 +201,23 @@ namespace Gadgeteer.Modules.Luca_Sasselli
             threadPeriod = period;
             threadTimeout = timeout;
 
-            System.Threading.Thread poller = new System.Threading.Thread(new System.Threading.ThreadStart(ThreadScan));
-            poller.Start();
+            if (!threadScan.IsAlive)
+            {
+                // Thread was killed or not yet started
+                threadScan.Start();
+            }
+            else
+            {
+                // Thread is running or sleeping
+                threadWaitForStop.Set();
+            }
         }
 
         /// <summary>Stop listening for a new NFC card</summary>
         public void StopScan()
         {
             running = false;
+            threadWaitForStop.Set();
         }
 
         /// <summary>Returns current firmware version</summary>
@@ -255,7 +269,7 @@ namespace Gadgeteer.Modules.Luca_Sasselli
 
         }
 
-        private void ThreadScan()
+        private void Scan()
         {
             while (running)
             {
@@ -269,9 +283,10 @@ namespace Gadgeteer.Modules.Luca_Sasselli
                     }
                     TagFound(uid);
                 }
-            }
 
-            System.Threading.Thread.Sleep(threadPeriod);
+                threadWaitForStop.WaitOne(threadPeriod, true);
+                threadWaitForStop.Reset();
+            }
         }
 
         // THIS IS AN HIDE METHOD: USE AT YOUR OWN RISK!

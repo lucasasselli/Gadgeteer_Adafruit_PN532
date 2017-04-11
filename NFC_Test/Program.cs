@@ -43,7 +43,20 @@ namespace Test
         // Tag Found event
         void TagFound(string uid)
         {
+            nfc.StopScan();
             Debug.Print("TAG! " + uid);
+
+            Debug.Print("Starting dummy operation...");
+
+            // Perform dummy operation...
+            for (int i = 0; i < 100; i++)
+            {
+                Thread.Sleep(20);
+            }
+
+            Debug.Print("Dummy operation completed! Resuming scan...");
+
+            nfc.StartScan(1000, 100);
         }
     }
 }
