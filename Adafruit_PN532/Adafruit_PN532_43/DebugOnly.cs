@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Gadgeteer.Modules.Luca_Sasselli
 {
-    class DebugOnly
+    internal static class DebugOnly
     {
         [Conditional("DEBUG")]
         public static void Print(string text)
