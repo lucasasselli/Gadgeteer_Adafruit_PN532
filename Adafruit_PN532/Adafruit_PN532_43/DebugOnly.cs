@@ -1,7 +1,4 @@
-using System;
 using System.Diagnostics;
-
-using Microsoft.SPOT;
 
 namespace Gadgeteer.Modules.Luca_Sasselli
 {

@@ -3,7 +3,7 @@
   <!-- Change this whenever building a new installer.  The fourth number is ignored, so change one of the top three.
   Otherwise, users will not be able to upgrade properly; Windows Installer will exit with an error instead of upgrading. -->
   <!-- Also change the version numbers in Properties/AssemblyInfo.cs for each NETMF version supported -->
-  <?define ModuleSoftwareVersion = "1.1.0.0" ?>
+  <?define ModuleSoftwareVersion = "1.2.0.0" ?>
 
   <!-- Alternatively, to synchronize this mainboard version to a kit version, uncomment the below lines, edit the pathname
   to point to your kit, and comment out the line above.  You also need to edit AssemblyInfo.cs.  See the kit readme.txt 

@@ -58,7 +58,7 @@
         </socketShape>
       </nestedChildShapes>
     </mainboardShape>
-    <socketConnector Id="87ddf7e2-4f9b-4821-92ad-f82b8e82f407" edgePoints="[(3.42122047598862 : 1.605); (6.185 : 1.605); (6.185 : 2.05641732150427)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <socketConnector Id="87ddf7e2-4f9b-4821-92ad-f82b8e82f407" edgePoints="[(3.42122047598862 : 1.605); (6.185 : 1.605); (6.185 : 2.05641732150427)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <socketUseReferencesSocketMoniker Id="8e256a1f-2efc-4796-9bde-df139f40e4a4" />
       <nodes>
         <socketUseShapeMoniker Id="f52de75e-4618-451e-a477-7eac65ac56b0" />
