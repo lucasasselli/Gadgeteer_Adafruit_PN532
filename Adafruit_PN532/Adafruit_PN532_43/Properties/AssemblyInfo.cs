@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("GTM.Luca_Sasselli.Adafruit_PN532")]
 [assembly: AssemblyDescription("Driver for Adafruit_PN532 module made by Luca Sasselli for Microsoft .NET Gadgeteer")]

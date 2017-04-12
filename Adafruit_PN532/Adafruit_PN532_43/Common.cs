@@ -1,8 +1,8 @@
 namespace Gadgeteer.Modules.Luca_Sasselli
 {
-    internal class Common
+    internal static class Common
     {
-        private const string HEX_CHARS = "0123456789ABCDEF";
+        private const string HexChars = "0123456789ABCDEF";
 
         private const byte SpiNullByte = 0x00;
 
@@ -45,8 +45,8 @@ namespace Gadgeteer.Modules.Luca_Sasselli
         public static string ByteToHex(byte input)
         {
             var output = "";
-            output += HEX_CHARS[input >> 4];
-            output += HEX_CHARS[input & 0x0F];
+            output += HexChars[input >> 4];
+            output += HexChars[input & 0x0F];
             return output;
         }
 
