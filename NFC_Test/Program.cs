@@ -23,6 +23,7 @@ namespace Test
             Debug.Print("NFC ver. " + version);
 
             nfc.TagFound += TagFound;
+            nfc.Error += Error;
             nfc.StartScan(1000, 100);
         }
 
@@ -41,6 +42,12 @@ namespace Test
             Debug.Print("Dummy operation completed! Resuming scan...");
 
             nfc.StartScan(1000, 100);
+        }
+
+        // Error event
+        private void Error()
+        {
+            Debug.Print("ERROR: NFC Not responding!");
         }
     }
 }
